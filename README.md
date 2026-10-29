@@ -15,3 +15,6 @@ App para entrenadores y nutricionistas: alumnos, rutinas ilustradas, planes de c
 
 ## Pruebas
 `node test/api.test.mjs` y `node test/e2e.test.mjs` (usan una base de datos local de prueba).
+
+## Publicación
+Cada cambio que se sube a la rama `main` se publica solo en https://plan-coach-py.netlify.app
