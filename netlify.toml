@@ -1,0 +1,33 @@
+[build]
+  publish = "public"
+  command = "echo 'Plan Coach: sin paso de armado'"
+
+[functions]
+  directory = "netlify/functions"
+  node_bundler = "esbuild"
+
+[[headers]]
+  for = "/sw.js"
+  [headers.values]
+    Cache-Control = "no-cache"
+    Service-Worker-Allowed = "/"
+
+[[redirects]]
+  from = "/master"
+  to = "/master.html"
+  status = 200
+
+[[redirects]]
+  from = "/demo"
+  to = "/demo.html"
+  status = 200
+
+[[redirects]]
+  from = "/guia"
+  to = "/guia.html"
+  status = 200
+
+[[redirects]]
+  from = "/alumno"
+  to = "/alumno.html"
+  status = 200

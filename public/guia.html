@@ -1,0 +1,364 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#1F55F0">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Guía Plan Coach">
+<link rel="manifest" href="/manifest.json">
+<link rel="icon" href="/icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/icon-180.png">
+<style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);color-scheme:light}body{margin:0;font:14px system-ui,sans-serif}img{max-width:100%}[hidden]{display:none!important}</style>
+<title>Guía de Ejercicios</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+</head>
+<body>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=Figtree:wght@400;500;600;700&display=swap">
+<style>
+/* Layout: guía de una columna para celular — cada ejercicio es una ficha con ilustración animada, pasos y error común */
+:root{
+  --bg:#EDF0EA; --surface:#FFFFFF; --sunk:#E3E8E1; --ink:#17201B; --muted:#5A6960; --line:#D3DBD1;
+  --accent:#1F55F0; --accent-soft:#E2E9FF; --on-accent:#FFFFFF; --due:#C23D28; --due-soft:#FBE3DE;
+  --ej-ink:#17201B; --ej-far:#9AA79F; --ej-eq:#5A6960; --ej-ground:#C9D2C7; --ej-pad:#C9D2C7;
+  --display:"Barlow Condensed","Arial Narrow",system-ui,sans-serif;
+  --body:"Figtree",system-ui,-apple-system,"Segoe UI",sans-serif;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0F1411; --surface:#18201B; --sunk:#121915; --ink:#E6ECE7; --muted:#94A59B; --line:#2A352E;
+  --accent:#7192FF; --accent-soft:#1E2A4D; --on-accent:#0B1020; --due:#FF8A75; --due-soft:#3A1E19;
+  --ej-ink:#E6ECE7; --ej-far:#5E6D64; --ej-eq:#94A59B; --ej-ground:#2F3B33; --ej-pad:#344038; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0F1411; --surface:#18201B; --sunk:#121915; --ink:#E6ECE7; --muted:#94A59B; --line:#2A352E;
+  --accent:#7192FF; --accent-soft:#1E2A4D; --on-accent:#0B1020; --due:#FF8A75; --due-soft:#3A1E19;
+  --ej-ink:#E6ECE7; --ej-far:#5E6D64; --ej-eq:#94A59B; --ej-ground:#2F3B33; --ej-pad:#344038; color-scheme:dark}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:15px;line-height:1.5}
+*{box-sizing:border-box}
+.wrap{max-width:620px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+header{background:var(--accent);color:var(--on-accent)}
+header .wrap{padding-block:22px 20px;display:flex;align-items:center;gap:12px}
+.logo{width:42px;height:42px;border-radius:12px;background:var(--on-accent);color:var(--accent);display:grid;place-items:center;flex:none}
+.logo svg{width:26px;height:26px}
+h1{font-family:var(--display);font-weight:700;font-size:32px;line-height:1;text-transform:uppercase;letter-spacing:.01em;margin:0;text-wrap:balance}
+header p{margin:4px 0 0;font-size:13.5px;opacity:.85}
+main .wrap{padding-block:18px 40px;display:flex;flex-direction:column;gap:22px}
+.chips{display:flex;gap:6px;overflow-x:auto;padding-bottom:2px;scrollbar-width:none}
+.chips button{flex:none;border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:20px;padding:7px 14px;font:600 13px var(--body);cursor:pointer}
+.chips button[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.grupo{display:flex;flex-direction:column;gap:10px}
+.grupo h2{font-family:var(--display);font-weight:700;font-size:15px;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);margin:0}
+.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.mini{border:1px solid var(--line);background:var(--surface);border-radius:14px;padding:8px 8px 10px;text-align:left;cursor:pointer;color:var(--ink);font:inherit;display:flex;flex-direction:column;gap:4px;min-width:0;text-decoration:none}
+.mini svg{width:100%;height:auto;display:block;background:var(--sunk);border-radius:10px;aspect-ratio:200/214}
+.mini b{font-size:14px;line-height:1.25}
+.mini span{font-size:12px;color:var(--muted)}
+.ficha{background:var(--surface);border:1px solid var(--line);border-radius:18px;overflow:hidden}
+.ficha .ill{background:var(--sunk);display:flex;justify-content:center}
+.ficha .ill svg{width:min(100%,360px);height:auto;display:block}
+.ficha .tx{padding:16px;display:flex;flex-direction:column;gap:12px}
+.ficha h2{font-family:var(--display);font-weight:700;font-size:30px;line-height:1.02;text-transform:uppercase;margin:0;text-wrap:balance}
+.musc{font-size:13px;font-weight:600;color:var(--accent);background:var(--accent-soft);border-radius:20px;padding:3px 10px;align-self:flex-start}
+ol{margin:0;padding:0;list-style:none;counter-reset:p;display:flex;flex-direction:column;gap:10px}
+ol li{counter-increment:p;display:grid;grid-template-columns:28px 1fr;gap:10px;align-items:start}
+ol li::before{content:counter(p);font-family:var(--display);font-weight:700;font-size:16px;width:28px;height:28px;border-radius:8px;background:var(--ink);color:var(--bg);display:grid;place-items:center}
+.err{background:var(--due-soft);color:var(--due);border-radius:12px;padding:10px 12px;font-size:14px}
+.err b{display:block;font-size:12px;text-transform:uppercase;letter-spacing:.06em;margin-bottom:2px}
+.fases{display:flex;justify-content:space-between;font-size:12px;color:var(--muted);padding:0 16px}
+.back{align-self:flex-start;border:0;background:var(--sunk);color:var(--ink);border-radius:10px;padding:9px 14px;font:600 14px var(--body);cursor:pointer}
+.nota{font-size:12.5px;color:var(--muted);text-align:center}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+@media (max-width:360px){.grid{gap:8px}.mini b{font-size:13px}}
+</style>
+<header><div class="wrap"><span class="logo" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M6.5 7v10M17.5 7v10M3.5 9.5v5M20.5 9.5v5M6.5 12h11"/></svg></span><div><h1>Guía de ejercicios</h1><p>Cómo se hace cada ejercicio de tu rutina</p></div></div></header>
+<main><div class="wrap" id="app"></div></main>
+<script>
+/* ===== Ilustraciones de ejercicios: figura de perfil animada entre dos posiciones ===== */
+var EJ=(function(){
+const LEN={torso:52,thigh:40,shin:40,ua:30,fa:28,neck:13,foot:11};
+const F=190; // piso
+const dir=a=>{const r=a*Math.PI/180;return [Math.sin(r),-Math.cos(r)];};
+const add=(p,l,a)=>{const d=dir(a);return [p[0]+d[0]*l,p[1]+d[1]*l];};
+const angTo=(a,b)=>Math.atan2(b[0]-a[0],-(b[1]-a[1]))*180/Math.PI;
+function ik(base,t,a,b,bend){
+  let dx=t[0]-base[0],dy=t[1]-base[1];let d=Math.hypot(dx,dy);
+  const dm=Math.min(a+b-0.01,Math.max(Math.abs(a-b)+0.01,d));
+  const ux=dx/(d||1),uy=dy/(d||1);
+  const ca=(a*a+dm*dm-b*b)/(2*a*dm),al=Math.acos(Math.max(-1,Math.min(1,ca)));
+  const phi=Math.atan2(uy,ux);
+  const c1=[base[0]+a*Math.cos(phi+al),base[1]+a*Math.sin(phi+al)];
+  const c2=[base[0]+a*Math.cos(phi-al),base[1]+a*Math.sin(phi-al)];
+  let j;
+  if(bend==='f')j=c1[0]>=c2[0]?c1:c2;else if(bend==='b')j=c1[0]<c2[0]?c1:c2;
+  else if(bend==='u')j=c1[1]<c2[1]?c1:c2;else j=c1[1]>=c2[1]?c1:c2;
+  const end=[base[0]+ux*dm,base[1]+uy*dm];
+  // extremo real desde la articulación
+  const e2=[j[0]+(end[0]-j[0])*b/Math.hypot(end[0]-j[0],end[1]-j[1]),j[1]+(end[1]-j[1])*b/Math.hypot(end[0]-j[0],end[1]-j[1])];
+  return [j,e2];
+}
+function fk(p){
+  const P={hip:p.hip};
+  const torso=p.torsoTo?angTo(p.hip,p.torsoTo):p.torso;
+  P.sh=add(P.hip,LEN.torso,torso);
+  P.head=add(P.sh,LEN.neck,torso+(p.head||0));
+  const leg=(s)=>{const t=p['ank'+s];let k,a;
+    if(t){[k,a]=ik(P.hip,t,LEN.thigh,LEN.shin,t[2]||'f');}
+    else{k=add(P.hip,LEN.thigh,p['thigh'+s]??p.thigh);a=add(k,LEN.shin,p['shin'+s]??p.shin);}
+    P['knee'+s]=k;P['ank'+s]=a;P['toe'+s]=add(a,LEN.foot,p['foot'+s]??p.foot??90);};
+  const arm=(s)=>{const t=p['hand'+s]||(s&&p.hand);let e,h;
+    if(t){[e,h]=ik(P.sh,t,LEN.ua,LEN.fa,t[2]||'d');}
+    else{e=add(P.sh,LEN.ua,p['arm'+s]??p.arm);h=add(e,LEN.fa,p['fore'+s]??p.fore);}
+    P['elb'+s]=e;P['hand'+s]=h;};
+  leg('');leg('2');arm('');arm('2');
+  return P;
+}
+function lerp(a,b,t){
+  if(typeof a==='number')return a+(b-a)*t;
+  if(Array.isArray(a))return a.map((v,i)=>typeof v==='number'?v+(b[i]-v)*t:v);
+  return a;
+}
+function mix(A,B,t){const o={};for(const k in A)o[k]=(k in B)?lerp(A[k],B[k],t):A[k];return o;}
+const r1=n=>Math.round(n*10)/10;
+const ln=(a,b,w,c,op)=>`<line x1="${r1(a[0])}" y1="${r1(a[1])}" x2="${r1(b[0])}" y2="${r1(b[1])}" stroke="${c}" stroke-width="${w}" stroke-linecap="round"${op?` opacity="${op}"`:''}/>`;
+const circ=(p,r,c,extra)=>`<circle cx="${r1(p[0])}" cy="${r1(p[1])}" r="${r}" fill="${c}"${extra||''}/>`;
+const C={ink:'var(--ej-ink,#17201B)',far:'var(--ej-far,#9AA79F)',eq:'var(--ej-eq,#5A6960)',acc:'var(--ej-acc,#1F55F0)',ground:'var(--ej-ground,#D3DBD1)',pad:'var(--ej-pad,#C9D2C7)'};
+const plate=(p,r)=>circ(p,r,C.eq)+circ(p,r*0.35,C.pad)+circ(p,2.2,C.eq);
+const disc=p=>`<rect x="${r1(p[0]-4)}" y="${r1(p[1]-8)}" width="8" height="16" rx="3" fill="${C.eq}"/>`;
+const goblet=p=>`<rect x="${r1(p[0]-6)}" y="${r1(p[1]-13)}" width="12" height="26" rx="4" fill="${C.eq}"/>`;
+const floor=`<line x1="0" y1="${F+1}" x2="200" y2="${F+1}" stroke="${C.ground}" stroke-width="3"/>`;
+function body(P,o){
+  o=o||{};let s='';
+  s+=ln(P.sh,P.elb2,8,C.far)+ln(P.elb2,P.hand2,7,C.far);
+  s+=ln(P.hip,P.knee2,10,C.far)+ln(P.knee2,P.ank2,8,C.far)+ln(P.ank2,P.toe2,6,C.far);
+  s+=ln(P.hip,P.sh,15,C.ink);
+  s+=ln(P.hip,P.knee,10,C.ink)+ln(P.knee,P.ank,8,C.ink)+ln(P.ank,P.toe,6,C.ink);
+  s+=circ(P.head,10,C.ink);
+  s+=ln(P.sh,P.elb,8,C.ink)+ln(P.elb,P.hand,7,C.ink);
+  return s;
+}
+/* ---- vista de frente (solo elevaciones laterales) ---- */
+function front(a){
+  const cx=100,sy=58,hy=110;let s='';
+  const arm=(sg)=>{const sh=[cx+sg*14,sy];const d=[sg*Math.sin(a*Math.PI/180),Math.cos(a*Math.PI/180)];
+    const e=[sh[0]+d[0]*30,sh[1]+d[1]*30];const h=[e[0]+d[0]*27,e[1]+d[1]*27];
+    return ln(sh,e,8,C.ink)+ln(e,h,7,C.ink)+`<rect x="${r1(h[0]-8)}" y="${r1(h[1]-4)}" width="16" height="8" rx="3" fill="${C.eq}"/>`;};
+  s+=ln([cx-8,hy],[cx-11,148],10,C.ink)+ln([cx-11,148],[cx-12,186],8,C.ink)+ln([cx+8,hy],[cx+11,148],10,C.ink)+ln([cx+11,148],[cx+12,186],8,C.ink);
+  s+=`<rect x="${cx-16}" y="${sy-6}" width="32" height="${hy-sy+8}" rx="12" fill="${C.ink}"/>`;
+  s+=circ([cx,sy-17],10,C.ink)+arm(-1)+arm(1);
+  return s;
+}
+/* ---- catálogo ---- */
+const L=[ [100,186] ];
+const X={
+ 'sentadilla-con-barra':{n:'Sentadilla con barra',m:'Cuádriceps, glúteos y zona media',
+   A:{hip:[96,106.5],torso:3,arm:203,fore:353,ank:[100,186,'f'],ank2:[100,186,'f']},
+   B:{hip:[72,150],torso:40,arm:240,fore:30,ank:[100,186,'f'],ank2:[100,186,'f']},
+   eq:P=>plate(P.hand,17),
+   pasos:['Barra apoyada en la parte alta de la espalda, pies al ancho de hombros.','Bajá llevando la cadera atrás y abajo, con el pecho arriba.','Bajá hasta que el muslo quede paralelo al piso y subí empujando con todo el pie.'],
+   error:'Que las rodillas se vayan hacia adentro o que se levanten los talones.'},
+ 'sentadilla-goblet':{n:'Sentadilla goblet',m:'Cuádriceps, glúteos y zona media',
+   A:{hip:[97,106.5],torso:2,arm:160,fore:20,ank:[100,186,'f'],ank2:[100,186,'f']},
+   B:{hip:[80,152],torso:22,arm:180,fore:40,ank:[100,186,'f'],ank2:[100,186,'f']},
+   eq:P=>goblet(P.hand),
+   pasos:['Sostené la mancuerna vertical pegada al pecho.','Bajá con la espalda recta, los codos pasan entre las rodillas.','Subí empujando el piso, sin despegar los talones.'],
+   error:'Redondear la espalda o alejar la mancuerna del cuerpo.'},
+ 'peso-muerto-rumano':{n:'Peso muerto rumano',m:'Isquiotibiales, glúteos y espalda baja',
+   A:{hip:[98,106.5],torso:0,arm:180,fore:180,ank:[100,186,'f'],ank2:[100,186,'f']},
+   B:{hip:[76,114],torso:70,hand:[106,168,'b'],hand2:[106,168,'b'],ank:[100,186,'f'],ank2:[100,186,'f']},
+   eq:P=>plate(P.hand,17),
+   pasos:['De pie con la barra frente a los muslos y rodillas apenas flexionadas.','Llevá la cadera hacia atrás y bajá la barra pegada a las piernas.','Cuando sientas estirar la parte de atrás del muslo, volvé apretando los glúteos.'],
+   error:'Doblar la espalda o alejar la barra de las piernas.'},
+ 'prensa':{n:'Prensa 45°',m:'Cuádriceps y glúteos',
+   A:{hip:[90,150],torso:-58,arm:160,fore:110,ank:[152,98,'u'],ank2:[152,98,'u'],foot:-45},
+   B:{hip:[90,150],torso:-58,arm:160,fore:110,ank:[130,120,'u'],ank2:[130,120,'u'],foot:-45},
+   scene:()=>{const h=[90,150];const b0=[h[0]-4,h[1]+11];const b1=add(b0,92,-58);
+     return ln(b0,b1,7,C.pad)+ln([b0[0],b0[1]],[b0[0]+40,b0[1]],7,C.pad)+ln([b0[0]+20,b0[1]],[b0[0]+20,F],6,C.pad)+ln([124,F],[200,114],5,C.pad);},
+   eq:P=>{const c=add(P.ank,7,45);return ln(add(c,24,-45),add(c,24,135),7,C.eq)+ln(add(c,6,45),add(add(c,6,45),18,45),12,C.eq);},
+   pasos:['Espalda y cadera bien apoyadas en el respaldo, pies al ancho de hombros.','Bajá la plataforma doblando las rodillas hasta 90° sin despegar la cadera.','Empujá con todo el pie sin trabar las rodillas arriba.'],
+   error:'Despegar la cadera del asiento al bajar o trabar las rodillas al final.'},
+ 'zancadas':{n:'Zancadas con mancuernas',m:'Cuádriceps, glúteos y equilibrio',
+   A:{hip:[98,110],torso:0,arm:180,fore:180,ank:[128,186,'f'],ank2:[62,180,'b'],foot2:120},
+   B:{hip:[95,150],torso:0,arm:180,fore:180,ank:[128,186,'f'],ank2:[60,180,'d'],foot2:120},
+   eq:P=>disc(P.hand),
+   pasos:['Un pie adelante y otro atrás, con una mancuerna en cada mano.','Bajá en línea recta hasta que la rodilla de atrás casi toque el piso.','Subí empujando con la pierna de adelante y repetí con el otro lado.'],
+   error:'Inclinar el tronco hacia adelante o que la rodilla de adelante se vaya hacia adentro.'},
+ 'elevacion-talones':{n:'Elevación de talones',m:'Gemelos y sóleo',
+   A:{hip:[98,106.5],torso:0,arm:180,fore:180,ank:[100,186,'f'],ank2:[100,186,'f'],foot:90},
+   B:{hip:[100,97.5],torso:0,arm:180,fore:180,ank:[102,177,'f'],ank2:[102,177,'f'],foot:135},
+   eq:P=>disc(P.hand),
+   pasos:['De pie, piernas estiradas, mancuernas a los costados.','Subí en puntas de pie lo más alto que puedas.','Mantené un segundo arriba y bajá lento.'],
+   error:'Rebotar o hacerlo rápido sin pausa arriba.'},
+ 'press-de-banca':{n:'Press de banca',m:'Pecho, hombros y tríceps',
+   A:{hip:[118,144],torso:270,hand:[68,86,'f'],hand2:[68,86,'f'],ank:[150,186,'u'],ank2:[150,186,'u']},
+   B:{hip:[118,144],torso:270,hand:[76,128,'d'],hand2:[76,128,'d'],ank:[150,186,'u'],ank2:[150,186,'u']},
+   scene:()=>`<rect x="30" y="150" width="104" height="8" rx="3" fill="${C.pad}"/>`+ln([50,158],[50,F],6,C.pad)+ln([118,158],[118,F],6,C.pad)+ln([62,40],[62,F],5,C.pad),
+   eq:P=>plate(P.hand,17),
+   pasos:['Acostado en el banco, ojos debajo de la barra y pies firmes en el piso.','Bajá la barra controlada hasta la mitad del pecho.','Empujá hacia arriba sin despegar la espalda ni los glúteos del banco.'],
+   error:'Rebotar la barra en el pecho o abrir los codos a 90°.'},
+ 'press-militar':{n:'Press militar con mancuernas',m:'Hombros y tríceps',
+   A:{hip:[98,106.5],torso:0,hand:[108,56,'d'],hand2:[108,56,'d'],ank:[100,186,'f'],ank2:[100,186,'f']},
+   B:{hip:[98,106.5],torso:0,hand:[101,-2,'f'],hand2:[101,-2,'f'],ank:[100,186,'f'],ank2:[100,186,'f']},
+   eq:P=>disc(P.hand),
+   pasos:['Mancuernas a la altura de los hombros, abdomen firme.','Empujá hacia arriba hasta estirar los brazos.','Bajá controlado hasta la altura de las orejas.'],
+   error:'Arquear la espalda baja para empujar.'},
+ 'fondos':{n:'Fondos en paralelas',m:'Tríceps, pecho y hombros',
+   A:{hip:[89,106],torso:8,hand:[100,112,'b'],hand2:[100,112,'b'],thigh:175,shin:255},
+   B:{hip:[88,135],torso:25,hand:[100,112,'b'],hand2:[100,112,'b'],thigh:175,shin:255},
+   scene:()=>ln([60,115],[150,115],6,C.pad)+ln([145,115],[145,F],6,C.pad),
+   pasos:['Agarrate de las barras con los brazos estirados.','Bajá doblando los codos hacia atrás hasta 90°.','Subí empujando hasta estirar los brazos.'],
+   error:'Bajar de más y cargar los hombros.'},
+ 'elevaciones-laterales':{n:'Elevaciones laterales',m:'Hombro (deltoides lateral)',front:true,A:{a:8},B:{a:84},
+   pasos:['De pie, una mancuerna en cada mano, codos apenas flexionados.','Subí los brazos hacia los costados hasta la altura de los hombros.','Bajá lento, sin balancear el cuerpo.'],
+   error:'Subir más alto que los hombros o tomar impulso con el cuerpo.'},
+ 'extension-triceps':{n:'Extensión de tríceps en polea',m:'Tríceps',
+   A:{hip:[93,106.5],torso:10,arm:185,fore:40,ank:[96,186,'f'],ank2:[96,186,'f']},
+   B:{hip:[93,106.5],torso:10,arm:185,fore:172,ank:[96,186,'f'],ank2:[96,186,'f']},
+   scene:()=>circ([130,-4],6,C.pad),
+   eq:P=>ln(P.hand,[130,-4],2.5,C.eq)+circ(P.hand,5,C.eq),
+   pasos:['Frente a la polea, codos pegados al cuerpo.','Empujá hacia abajo hasta estirar los brazos.','Volvé lento sin mover los codos de lugar.'],
+   error:'Separar los codos del cuerpo o ayudarse con el tronco.'},
+ 'remo-con-mancuerna':{n:'Remo con mancuerna',m:'Espalda (dorsales) y bíceps',
+   A:{hip:[80,118],torso:78,hand:[132,166,'f'],hand2:[150,162,'f'],ank:[102,186,'f'],thigh2:180,shin2:270},
+   B:{hip:[80,118],torso:78,hand:[112,126,'u'],hand2:[150,162,'f'],ank:[102,186,'f'],thigh2:180,shin2:270},
+   scene:()=>`<rect x="30" y="163" width="130" height="8" rx="3" fill="${C.pad}"/>`+ln([45,171],[45,F],6,C.pad)+ln([145,171],[145,F],6,C.pad),
+   eq:P=>disc(P.hand),
+   pasos:['Una rodilla y una mano apoyadas en el banco, espalda recta.','Tirá de la mancuerna hacia la cadera llevando el codo atrás.','Bajá lento hasta estirar el brazo.'],
+   error:'Girar el tronco para subir el peso.'},
+ 'flexiones-rodillas':{n:'Flexiones de brazos (rodillas)',m:'Pecho, hombros y tríceps',
+   A:{hip:[101.7,159.6],torso:52.5,thigh:232.5,shin:290,hand:[145,186,'u'],hand2:[145,186,'u']},
+   B:{hip:[109.7,178.8],torso:82.5,thigh:262.5,shin:290,hand:[145,186,'u'],hand2:[145,186,'u']},
+   pasos:['Rodillas en el piso, manos un poco más abiertas que los hombros.','Bajá el pecho en bloque, con el cuerpo recto de rodillas a cabeza.','Empujá el piso hasta estirar los brazos.'],
+   error:'Hundir la cadera o levantar la cola.'},
+ 'puente-de-gluteo':{n:'Puente de glúteo',m:'Glúteos e isquiotibiales',
+   A:{hip:[102,180],torsoTo:[50,182],ank:[132,186,'u'],ank2:[132,186,'u'],hand:[100,186,'d'],hand2:[100,186,'d']},
+   B:{hip:[99,153],torsoTo:[50,182],ank:[132,186,'u'],ank2:[132,186,'u'],hand:[100,186,'d'],hand2:[100,186,'d']},
+   pasos:['Acostado boca arriba, rodillas dobladas y pies apoyados.','Subí la cadera apretando los glúteos hasta formar una línea recta.','Mantené un segundo arriba y bajá lento.'],
+   error:'Arquear la espalda baja en lugar de usar los glúteos.'},
+ 'plancha':{n:'Plancha',m:'Abdomen y zona media',
+   A:{hip:[103.5,165.8],torsoTo:[154.6,156],ank:[25,181,'f'],ank2:[25,181,'f'],foot:150,hand:[183,186,'d'],hand2:[183,186,'d']},
+   B:{hip:[103.5,164.6],torsoTo:[154.6,156],ank:[25,181,'f'],ank2:[25,181,'f'],foot:150,hand:[183,186,'d'],hand2:[183,186,'d']},
+   pasos:['Antebrazos en el piso, codos debajo de los hombros.','Cuerpo recto de talones a cabeza, abdomen y glúteos firmes.','Mantené la posición respirando normal.'],
+   error:'Dejar caer la cadera o levantarla demasiado.'},
+ 'dominadas':{n:'Dominadas asistidas',m:'Espalda (dorsales) y bíceps',
+   A:{hip:[93.5,121.8],torso:5,hand:[100,10,'f'],hand2:[100,10,'f'],thigh:165,shin:235},
+   B:{hip:[88,75],torso:10,hand:[100,10,'d'],hand2:[100,10,'d'],thigh:165,shin:235},
+   scene:()=>ln([50,8],[150,8],6,C.pad),
+   pasos:['Agarrá la barra con las manos un poco más abiertas que los hombros.','Subí llevando el pecho hacia la barra hasta pasar el mentón.','Bajá controlado hasta estirar los brazos.'],
+   error:'Balancearse o hacer medio recorrido.'},
+ 'remo-con-barra':{n:'Remo con barra',m:'Espalda media, dorsales y bíceps',
+   A:{hip:[80,112],torso:70,hand:[128,166,'f'],hand2:[128,166,'f'],ank:[100,186,'f'],ank2:[100,186,'f']},
+   B:{hip:[80,112],torso:70,hand:[112,124,'u'],hand2:[112,124,'u'],ank:[100,186,'f'],ank2:[100,186,'f']},
+   eq:P=>plate(P.hand,17),
+   pasos:['Inclinado hacia adelante con la espalda recta y rodillas flexionadas.','Tirá la barra hacia el abdomen llevando los codos atrás.','Bajá lento sin perder la posición de la espalda.'],
+   error:'Levantar el tronco para tirar con impulso.'},
+ 'jalon-al-pecho':{n:'Jalón al pecho',m:'Espalda (dorsales) y bíceps',
+   A:{hip:[90,146],torso:-8,hand:[94,28,'f'],hand2:[94,28,'f'],thigh:90,shin:180},
+   B:{hip:[90,146],torso:-14,hand:[98,90,'d'],hand2:[98,90,'d'],thigh:90,shin:180},
+   scene:()=>`<rect x="58" y="152" width="56" height="8" rx="3" fill="${C.pad}"/>`+ln([86,160],[86,F],6,C.pad)+`<rect x="118" y="126" width="22" height="9" rx="4" fill="${C.pad}"/>`+circ([96,-8],6,C.pad),
+   eq:P=>ln(P.hand,[96,-8],2.5,C.eq)+`<rect x="${r1(P.hand[0]-12)}" y="${r1(P.hand[1]-3)}" width="24" height="6" rx="3" fill="${C.eq}"/>`,
+   pasos:['Sentado con los muslos trabados, agarrá la barra abierta.','Tirá la barra hacia la parte alta del pecho, sacando pecho.','Subí lento hasta estirar los brazos.'],
+   error:'Tirar la barra detrás de la nuca o tirarse muy atrás.'},
+ 'face-pull':{n:'Face pull',m:'Hombro posterior y espalda alta',
+   A:{hip:[78,106.5],torso:-5,hand:[132,50,'d'],hand2:[132,50,'d'],ank:[82,186,'f'],ank2:[74,186,'f']},
+   B:{hip:[78,106.5],torso:-5,hand:[92,40,'u'],hand2:[92,40,'u'],ank:[82,186,'f'],ank2:[74,186,'f']},
+   scene:()=>circ([194,46],6,C.pad)+ln([194,40],[194,F],5,C.pad),
+   eq:P=>ln(P.hand,[194,46],2.5,C.eq)+circ(P.hand,4.5,C.eq),
+   pasos:['Polea a la altura de la cara, agarrá la soga con las palmas hacia abajo.','Tirá hacia la frente abriendo los codos bien arriba.','Volvé lento estirando los brazos.'],
+   error:'Tirar con los codos bajos o usar demasiado peso.'},
+ 'curl-de-biceps':{n:'Curl de bíceps',m:'Bíceps',
+   A:{hip:[98,106.5],torso:0,arm:180,fore:178,ank:[100,186,'f'],ank2:[100,186,'f']},
+   B:{hip:[98,106.5],torso:0,arm:176,fore:18,ank:[100,186,'f'],ank2:[100,186,'f']},
+   eq:P=>disc(P.hand),
+   pasos:['De pie, codos pegados al cuerpo y palmas hacia adelante.','Subí las mancuernas doblando solo los codos.','Bajá lento hasta estirar los brazos.'],
+   error:'Balancear el cuerpo o mover los codos hacia adelante.'}
+};
+const ALIAS=[
+ ['goblet','sentadilla-goblet'],['sentadilla','sentadilla-con-barra'],['squat','sentadilla-con-barra'],
+ ['peso-muerto','peso-muerto-rumano'],['rumano','peso-muerto-rumano'],['prensa','prensa'],
+ ['zancada','zancadas'],['estocada','zancadas'],['bulgara','zancadas'],['split','zancadas'],
+ ['talon','elevacion-talones'],['gemelo','elevacion-talones'],['pantorrilla','elevacion-talones'],
+ ['press-de-banca','press-de-banca'],['press-banca','press-de-banca'],['press-plano','press-de-banca'],['bench','press-de-banca'],
+ ['militar','press-militar'],['press-de-hombro','press-militar'],['press-hombro','press-militar'],['arnold','press-militar'],
+ ['fondo','fondos'],['dips','fondos'],
+ ['lateral','elevaciones-laterales'],
+ ['tricep','extension-triceps'],['polea-alta','extension-triceps'],
+ ['remo-con-mancuerna','remo-con-mancuerna'],['remo-mancuerna','remo-con-mancuerna'],['serrucho','remo-con-mancuerna'],
+ ['remo','remo-con-barra'],
+ ['flexion','flexiones-rodillas'],['lagartija','flexiones-rodillas'],['push-up','flexiones-rodillas'],
+ ['puente','puente-de-gluteo'],['hip-thrust','puente-de-gluteo'],
+ ['plancha','plancha'],['plank','plancha'],
+ ['dominada','dominadas'],['pull-up','dominadas'],
+ ['jalon','jalon-al-pecho'],['face-pull','face-pull'],['facepull','face-pull'],
+ ['curl','curl-de-biceps'],['bicep','curl-de-biceps']
+];
+function clave(nombre){
+  const s=String(nombre||'').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[^a-z0-9]+/g,'-');
+  for(const [k,v] of ALIAS)if(s.includes(k))return v;
+  return null;
+}
+function frame(key,t){
+  const x=X[key];if(!x)return '';
+  const e=t<.5?2*t*t:1-Math.pow(-2*t+2,2)/2;
+  if(x.front)return floor+front(lerp(x.A.a,x.B.a,e));
+  const P=fk(mix(x.A,x.B,e));
+  return floor+(x.scene?x.scene():'')+body(P)+(x.eq?x.eq(P):'');
+}
+function svg(key,t,cls){return `<svg class="${cls||'ejsvg'}" viewBox="0 -18 200 214" role="img" aria-label="${(X[key]||{}).n||''}">${frame(key,t)}</svg>`;}
+/* anima todos los <svg data-ej> visibles */
+let raf=null;
+function animar(root){
+  if(raf)cancelAnimationFrame(raf);
+  const reduce=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const els=[...(root||document).querySelectorAll('[data-ej]')];
+  if(!els.length)return;
+  const t0=performance.now();
+  const step=now=>{
+    const ph=((now-t0)/2600)%1;const t=ph<.5?ph*2:2-ph*2;
+    els.forEach(el=>{if(!el.isConnected)return;el.innerHTML=frame(el.dataset.ej,Math.max(0,Math.min(1,(t-.12)/.76)));});
+    if(!reduce&&els.some(el=>el.isConnected))raf=requestAnimationFrame(step);
+  };
+  if(reduce){els.forEach(el=>el.innerHTML=frame(el.dataset.ej,1));return;}
+  raf=requestAnimationFrame(step);
+}
+return {X,clave,svg,frame,animar};
+})();
+const GRUPOS=[
+ ['Piernas y glúteos',['sentadilla-con-barra','sentadilla-goblet','peso-muerto-rumano','prensa','zancadas','elevacion-talones','puente-de-gluteo']],
+ ['Pecho y hombros',['press-de-banca','flexiones-rodillas','fondos','press-militar','elevaciones-laterales']],
+ ['Espalda',['dominadas','jalon-al-pecho','remo-con-barra','remo-con-mancuerna','face-pull']],
+ ['Brazos',['curl-de-biceps','extension-triceps']],
+ ['Zona media',['plancha']]
+];
+const app=document.getElementById('app');
+let filtro='Todos';
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+function ficha(k){const x=EJ.X[k];
+  return `<article class="ficha" id="f-${k}"><div class="ill"><svg viewBox="0 -18 200 214" role="img" aria-label="Ilustración de ${esc(x.n)}" data-ej="${k}">${EJ.frame(k,0)}</svg></div>
+  <div class="fases"><span>Posición inicial</span><span>Posición final</span></div>
+  <div class="tx"><h2>${esc(x.n)}</h2><span class="musc">${esc(x.m)}</span>
+  <ol>${x.pasos.map(p=>`<li><span>${esc(p)}</span></li>`).join('')}</ol>
+  <div class="err"><b>Error común</b>${esc(x.error)}</div></div></article>`;}
+function mini(k){const x=EJ.X[k];return `<a class="mini" href="#${k}"><svg viewBox="0 -18 200 214" aria-hidden="true">${EJ.frame(k,1)}</svg><b>${esc(x.n)}</b><span>${esc(x.m)}</span></a>`;}
+function render(){
+  const h=decodeURIComponent((location.hash||'').slice(1));
+  if(h&&EJ.X[h]){
+    const g=GRUPOS.find(([,ks])=>ks.includes(h));
+    const otros=g?g[1].filter(k=>k!==h):[];
+    app.innerHTML=`<a class="back" href="#todos">← Todos los ejercicios</a>${ficha(h)}${otros.length?`<section class="grupo"><h2>Más de ${esc(g[0].toLowerCase())}</h2><div class="grid">${otros.map(mini).join('')}</div></section>`:''}`;
+    window.scrollTo(0,0);
+  }else{
+    const gs=GRUPOS.filter(([n])=>filtro==='Todos'||filtro===n);
+    app.innerHTML=`<div class="chips" role="group" aria-label="Filtrar por zona">${['Todos',...GRUPOS.map(g=>g[0])].map(n=>`<button data-f="${esc(n)}" aria-pressed="${n===filtro}">${esc(n)}</button>`).join('')}</div>
+    ${gs.map(([n,ks])=>`<section class="grupo"><h2>${esc(n)}</h2><div class="grid">${ks.map(mini).join('')}</div></section>`).join('')}
+    <p class="nota">Tocá un ejercicio para ver la animación y los pasos. Ante cualquier duda, consultá a tu entrenador.</p>`;
+  }
+  EJ.animar(app);
+}
+app.addEventListener('click',e=>{const b=e.target.closest('[data-f]');if(b){filtro=b.dataset.f;render();}});
+window.addEventListener('hashchange',render);
+render();
+</script>
+
+</body>
+</html>

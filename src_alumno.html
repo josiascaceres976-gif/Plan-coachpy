@@ -1,0 +1,191 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#1F55F0">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Mi entreno">
+<meta name="robots" content="noindex">
+<title>Mi Entreno</title>
+<link rel="manifest" href="/manifest-alumno.json">
+<link rel="icon" href="/icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/icon-180.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=Figtree:wght@400;500;600;700&display=swap">
+<style>
+/* Layout: app del alumno, una columna — saludo, lo de hoy, rutina ilustrada, comidas, cuota y progreso */
+:root{
+  --bg:#EDF0EA; --surface:#FFFFFF; --sunk:#E3E8E1; --ink:#17201B; --muted:#5A6960; --line:#D3DBD1;
+  --accent:#1F55F0; --accent-soft:#E2E9FF; --on-accent:#FFFFFF;
+  --ok:#1C7F47; --ok-soft:#DDF1E4; --due:#C23D28; --due-soft:#FBE3DE; --warn:#A86A00; --warn-soft:#FBEFD6;
+  --ej-ink:#17201B; --ej-far:#9AA79F; --ej-eq:#5A6960; --ej-ground:#C9D2C7; --ej-pad:#C9D2C7;
+  --display:"Barlow Condensed","Arial Narrow",system-ui,sans-serif;
+  --body:"Figtree",system-ui,-apple-system,"Segoe UI",sans-serif;
+  padding-bottom:env(safe-area-inset-bottom,0px);color-scheme:light;
+}
+@media (prefers-color-scheme: dark){:root{
+  --bg:#0F1411; --surface:#18201B; --sunk:#121915; --ink:#E6ECE7; --muted:#94A59B; --line:#2A352E;
+  --accent:#7192FF; --accent-soft:#1E2A4D; --on-accent:#0B1020;
+  --ok:#5BC98A; --ok-soft:#163423; --due:#FF8A75; --due-soft:#3A1E19; --warn:#E3A93C; --warn-soft:#352812;
+  --ej-ink:#E6ECE7; --ej-far:#5E6D64; --ej-eq:#94A59B; --ej-ground:#2F3B33; --ej-pad:#344038; color-scheme:dark}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--body);font-size:15px;line-height:1.45}
+button{font:inherit;color:inherit;cursor:pointer}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+[hidden]{display:none!important}
+.wrap{max-width:600px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.hero{background:var(--accent);color:var(--on-accent)}
+.hero .wrap{padding-block:calc(22px + env(safe-area-inset-top,0px)) 22px;display:flex;flex-direction:column;gap:6px}
+.hero small{font-size:12px;letter-spacing:.14em;text-transform:uppercase;opacity:.8;font-weight:600}
+.hero h1{font-family:var(--display);font-weight:700;font-size:38px;line-height:1;text-transform:uppercase;margin:0;text-wrap:balance}
+.hero p{margin:0;opacity:.9}
+main .wrap{padding-block:16px 40px;display:flex;flex-direction:column;gap:18px}
+section{display:flex;flex-direction:column;gap:8px;scroll-margin-top:12px}
+.h-sec{font-family:var(--display);font-weight:700;font-size:15px;letter-spacing:.09em;text-transform:uppercase;color:var(--muted)}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:14px;display:flex;flex-direction:column;gap:10px}
+.big{font-family:var(--display);font-weight:700;font-size:28px;line-height:1.05;text-transform:uppercase}
+.muted{color:var(--muted)}.small{font-size:13px}
+.btn{border:0;border-radius:12px;padding:12px 16px;font-weight:600;background:var(--sunk);display:inline-flex;align-items:center;justify-content:center;gap:8px;text-decoration:none;color:var(--ink);min-height:46px;text-align:center;width:100%}
+.btn.pri{background:var(--accent);color:var(--on-accent)}.btn.wa{background:var(--ok);color:#fff}
+.chip{display:inline-flex;font-size:12px;font-weight:600;border-radius:20px;padding:2px 9px;white-space:nowrap}
+.c-ok{background:var(--ok-soft);color:var(--ok)}.c-due{background:var(--due-soft);color:var(--due)}.c-warn{background:var(--warn-soft);color:var(--warn)}.c-acc{background:var(--accent-soft);color:var(--accent)}
+.meal{border-top:1px solid var(--line);padding-top:10px;display:flex;flex-direction:column;gap:4px}
+.meal:first-of-type{border-top:0;padding-top:0}
+.meal .hd{display:flex;gap:10px;align-items:baseline}
+.meal .hd b{font-family:var(--display);font-size:20px;font-variant-numeric:tabular-nums;width:54px;flex:none}
+.meal .hd span{font-weight:600;flex:1;min-width:0}
+.meal details summary{color:var(--accent);font-size:13px;cursor:pointer;margin-left:64px}
+.meal pre{white-space:pre-wrap;font-family:var(--body);font-size:13.5px;background:var(--sunk);border-radius:10px;padding:10px;margin:6px 0 0}
+.days{display:flex;gap:4px;overflow-x:auto;scrollbar-width:none}
+.days button{flex:1 0 auto;border:1px solid var(--line);background:var(--surface);border-radius:10px;padding:6px 10px;font-weight:600;font-size:13px;color:var(--muted)}
+.days button[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.ej{display:grid;grid-template-columns:96px 1fr;gap:12px;align-items:start;border-top:1px solid var(--line);padding-top:12px}
+.ej:first-of-type{border-top:0;padding-top:0}
+.ej .ill{background:var(--sunk);border-radius:12px;overflow:hidden;aspect-ratio:200/214}
+.ej .ill svg{width:100%;height:100%;display:block}
+.ej .ill.none{display:grid;place-items:center;color:var(--muted);font-size:12px;text-align:center;padding:6px}
+.ej b{display:block}
+.ej .tip{font-size:13px;color:var(--muted);margin-top:4px}
+.ej a{display:inline-block;margin-top:6px;color:var(--accent);font-weight:600;font-size:13.5px;text-decoration:none}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.stat{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:10px 12px;min-width:0}
+.stat .v{font-family:var(--display);font-weight:700;font-size:28px;line-height:1;font-variant-numeric:tabular-nums}
+.stat .l{font-size:12px;color:var(--muted);margin-top:3px}
+.rec{display:flex;gap:10px;align-items:baseline;border-top:1px solid var(--line);padding-top:8px}
+.rec:first-of-type{border-top:0;padding-top:0}
+.rec b{font-variant-numeric:tabular-nums;white-space:nowrap;font-size:13px;color:var(--muted)}
+.empty{padding:20px 16px;text-align:center;color:var(--muted);background:var(--surface);border:1px dashed var(--line);border-radius:16px}
+.note{font-size:12.5px;color:var(--muted);margin:0}
+</style>
+</head>
+<body>
+<div class="hero"><div class="wrap"><small id="eyebrow">Mi entrenamiento</small><h1 id="hola">Hola</h1><p id="sub"></p></div></div>
+<main><div class="wrap" id="view"><div class="empty"><b>Cargando…</b></div></div></main>
+<script>
+/*EJLIB*/
+</script>
+<script>
+(function(){
+const params=new URLSearchParams(location.search);
+let T=params.get('t');
+try{if(T)localStorage.setItem('pc.alumno',T);else T=localStorage.getItem('pc.alumno');}catch(e){}
+const GUIA=location.origin+'/guia';
+const esc=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const $=id=>document.getElementById(id);
+const DIA=['domingo','lunes','martes','miércoles','jueves','viernes','sábado'],DIAC=['Dom','Lun','Mar','Mié','Jue','Vie','Sáb'],ORDEN=[1,2,3,4,5,6,0];
+const MES=['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'];
+const fmt=f=>{if(!f)return'';const[y,m,d]=f.split('-');return +d+' '+MES[+m-1];};
+const gs=n=>'Gs. '+String(Math.round(Number(n)||0)).replace(/\B(?=(\d{3})+(?!\d))/g,'.');
+function waNum(t){let d=String(t||'').replace(/\D/g,'');if(!d)return'';if(d.startsWith('0'))d='595'+d.slice(1);else if(d.length===9&&d.startsWith('9'))d='595'+d;return d;}
+const esIOS=()=>/iphone|ipad|ipod/i.test(navigator.userAgent);
+const instalada=()=>window.matchMedia&&matchMedia('(display-mode: standalone)').matches||navigator.standalone===true;
+function b64ToU8(x){const p='='.repeat((4-x.length%4)%4);const b=atob((x+p).replace(/-/g,'+').replace(/_/g,'/'));return Uint8Array.from(b,c=>c.charCodeAt(0));}
+let D=null,diaSel=null;
+
+function avisosHTML(){
+  const ok=(()=>{try{return localStorage.getItem('pc.alumno.avisos')===T&&Notification.permission==='granted';}catch(e){return false;}})();
+  if(ok)return '';
+  const ios=esIOS()&&!instalada();
+  return `<div class="card" style="border-color:var(--accent)"><b>Recibí tus avisos</b><p class="note">Te avisamos la hora de cada comida, cuándo entrenás y cuándo vence tu cuota.</p>
+   ${ios?'<p class="note"><b>En iPhone:</b> tocá el botón Compartir y elegí <b>Agregar a inicio</b>. Después abrí la app desde ese ícono y tocá el botón de abajo.</p>':''}
+   <button class="btn pri" data-act="avisos">Activar avisos</button></div>`;
+}
+function ejHTML(e){
+  const k=window.EJ&&EJ.clave(e.nombre);
+  const link=e.video||(k?GUIA+'#'+k:'https://www.youtube.com/results?search_query='+encodeURIComponent(e.nombre+' técnica correcta'));
+  return `<div class="ej">${k?`<div class="ill"><svg viewBox="0 -18 200 214" role="img" aria-label="Cómo se hace ${esc(e.nombre)}" data-ej="${k}">${EJ.frame(k,0)}</svg></div>`:'<div class="ill none">Mirá el video</div>'}
+   <div><b>${esc(e.linea)}</b>${e.tips?`<div class="tip">💡 ${esc(e.tips)}</div>`:''}<a href="${esc(link)}" target="_blank" rel="noopener">${e.video?'▶ Ver video':'▶ Cómo se hace'}</a></div></div>`;
+}
+function comidasHTML(d){
+  const lista=D.plan[d]||[];
+  if(!lista.length)return '<p class="note">No hay comidas cargadas para este día.</p>';
+  const tot=lista.reduce((s,c)=>s+(Number(c.kcal)||0),0);
+  return lista.map(c=>`<div class="meal"><div class="hd"><b>${esc(c.hora)}</b><span>${esc(c.nombre)}: ${esc(c.titulo)}</span>${c.kcal?`<span class="chip c-acc">${esc(c.kcal)} kcal</span>`:''}</div>
+   ${c.ingredientes||c.pasos?`<details><summary>Ver receta</summary><pre>${c.ingredientes?'Ingredientes\n'+esc(String(c.ingredientes).split('\n').filter(Boolean).map(x=>'• '+x.trim()).join('\n')):''}${c.pasos?'\n\nPreparación\n'+esc(String(c.pasos).split('\n').filter(Boolean).map((x,i)=>(i+1)+'. '+x.trim()).join('\n')):''}</pre></details>`:''}</div>`).join('')
+   +(tot?`<p class="note" style="margin-top:4px">Total aproximado del día: <b>${tot.toLocaleString('es-PY')} kcal</b>${D.macros&&D.macros.kcal?' · objetivo '+Number(D.macros.kcal).toLocaleString('es-PY')+' kcal':''}</p>`:'');
+}
+function render(){
+  const n=String(D.nombre).split(' ')[0];
+  $('hola').textContent='Hola '+n;
+  $('eyebrow').textContent='Entrenás con '+D.entrenador.nombre;
+  $('sub').textContent=D.objetivo?'Objetivo: '+D.objetivo:'';
+  if(diaSel==null)diaSel=D.dow;
+  const turnoHoy=D.turnos.filter(t=>Number(t.dia)===D.dow).sort((a,b)=>a.hora.localeCompare(b.hora))[0];
+  const proximos=ORDEN.map(d=>D.turnos.filter(t=>Number(t.dia)===d).map(t=>DIAC[d]+' '+t.hora)).flat();
+  const c=D.cuota;
+  const chipC=c.estado==='pagado'?'<span class="chip c-ok">Pagada</span>':c.estado==='vencida'?'<span class="chip c-due">Vencida</span>':c.estado==='pendiente'?'<span class="chip c-warn">Pendiente</span>':'';
+  const med=D.mediciones,ult=med[med.length-1],pri=med[0];
+  const dif=ult&&pri&&ult!==pri&&typeof ult.peso==='number'&&typeof pri.peso==='number'?Math.round((ult.peso-pri.peso)*10)/10:null;
+  const tel=waNum(D.entrenador.telefono);
+  $('view').innerHTML=`
+  ${avisosHTML()}
+  <section id="hoy"><div class="h-sec">Hoy · ${DIA[D.dow]} ${fmt(D.hoy)}</div>
+   <div class="card">${turnoHoy?`<div><div class="big">Entrenás a las ${esc(turnoHoy.hora)}</div><div class="small muted">¡Te esperamos!</div></div>`:`<div><div class="big">Hoy descansás</div><div class="small muted">${proximos.length?'Tus días: '+esc(proximos.join(' · ')):'Consultá tus días con tu entrenador'}</div></div>`}</div></section>
+  <section id="rutina"><div class="h-sec">Tu rutina</div>
+   ${D.rutina?`<div class="card"><div><div class="big" style="font-size:24px">${esc(D.rutina.titulo)}</div><div class="small muted">${[D.rutina.nivel,D.rutina.dias].filter(Boolean).map(esc).join(' · ')}</div></div>
+    ${D.rutina.ejercicios.map(ejHTML).join('')}${D.rutina.notas?`<p class="note">📝 ${esc(D.rutina.notas)}</p>`:''}</div>`:'<div class="empty">Tu entrenador todavía no te asignó una rutina.</div>'}</section>
+  <section id="comidas"><div class="h-sec">Tus comidas</div>
+   <div class="days" role="group" aria-label="Día">${ORDEN.map(d=>`<button data-act="dia" data-d="${d}" aria-pressed="${d===diaSel}">${d===D.dow?'Hoy':DIAC[d]}</button>`).join('')}</div>
+   <div class="card" id="comidasDia">${comidasHTML(diaSel)}</div></section>
+  ${D.recordatorios.length?`<section><div class="h-sec">Recordatorios</div><div class="card">${D.recordatorios.map(r=>`<div class="rec"><b>${fmt(r.fecha)}${r.hora?' · '+esc(r.hora):''}</b><span>${esc(r.texto)}</span></div>`).join('')}</div></section>`:''}
+  <section id="progreso"><div class="h-sec">Tu progreso</div><div class="stats">
+   <div class="stat"><div class="v">${D.asistenciasMes}</div><div class="l">entrenos este mes</div></div>
+   <div class="stat"><div class="v">${ult&&typeof ult.peso==='number'?String(ult.peso).replace('.',','):'—'}</div><div class="l">peso kg</div></div>
+   <div class="stat"><div class="v" style="color:${dif==null?'inherit':dif<0?'var(--ok)':'var(--warn)'}">${dif==null?'—':(dif>0?'+':'')+String(dif).replace('.',',')}</div><div class="l">desde el inicio</div></div></div></section>
+  ${c.estado&&c.estado!=='sin'?`<section id="cuota"><div class="h-sec">Tu cuota</div><div class="card"><div style="display:flex;justify-content:space-between;align-items:center;gap:10px"><div><div class="big" style="font-size:24px">${c.monto?gs(c.monto):'Este mes'}</div><div class="small muted">${c.estado==='pagado'?'Pagada este mes. ¡Gracias!':'Vence el '+fmt(c.vence)}</div></div>${chipC}</div></div></section>`:''}
+  ${tel?`<a class="btn wa" href="https://wa.me/${tel}" target="_blank" rel="noopener">Escribirle a ${esc(D.entrenador.nombre.split(' ')[0])}</a>`:''}
+  <p class="note" style="text-align:center">Plan Coach · tu entrenador actualiza esta información</p>`;
+  if(window.EJ)EJ.animar($('rutina'));
+}
+async function cargar(){
+  if(!T){$('view').innerHTML='<div class="empty"><b>Falta tu link</b>Abrí el link que te mandó tu entrenador por WhatsApp.</div>';return;}
+  try{
+    const r=await fetch('/api/a/'+encodeURIComponent(T));const b=await r.json().catch(()=>({}));
+    if(!r.ok){$('view').innerHTML=`<div class="empty"><b>No pudimos abrir tu app</b>${esc(b.error||'Probá de nuevo más tarde.')}</div>`;return;}
+    D=b;render();
+    const h=location.hash.slice(1);if(h&&$(h))$(h).scrollIntoView();
+  }catch(e){$('view').innerHTML='<div class="empty"><b>Sin conexión</b>Revisá tu internet y volvé a abrir la app.</div>';}
+}
+async function activar(){
+  if(!('serviceWorker' in navigator)||!('PushManager' in window)){alertar(esIOS()&&!instalada()?'Primero agregá la app a la pantalla de inicio y abrila desde ahí.':'Este navegador no permite avisos. Probá con Chrome.');return;}
+  const p=await Notification.requestPermission();if(p!=='granted'){alertar('No se dio permiso para los avisos.');return;}
+  const reg=await navigator.serviceWorker.register('/sw.js');await navigator.serviceWorker.ready;
+  const {clave}=await (await fetch('/api/push/clave')).json();if(!clave){alertar('Los avisos todavía no están disponibles.');return;}
+  let sub=await reg.pushManager.getSubscription();if(!sub)sub=await reg.pushManager.subscribe({userVisibleOnly:true,applicationServerKey:b64ToU8(clave)});
+  const r=await fetch('/api/a/'+encodeURIComponent(T)+'/push',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({sub:sub.toJSON()})});
+  if(!r.ok){alertar('No se pudieron activar los avisos.');return;}
+  try{localStorage.setItem('pc.alumno.avisos',T);}catch(e){}
+  render();
+}
+function alertar(m){const el=document.createElement('div');el.className='card';el.style.borderColor='var(--warn)';el.textContent=m;$('view').prepend(el);setTimeout(()=>el.remove(),6000);}
+document.addEventListener('click',e=>{const t=e.target.closest('[data-act]');if(!t)return;
+  if(t.dataset.act==='avisos'){t.disabled=true;activar().catch(()=>alertar('No se pudieron activar los avisos.')).finally(()=>t.disabled=false);}
+  if(t.dataset.act==='dia'){diaSel=Number(t.dataset.d);document.querySelectorAll('.days button').forEach(b=>b.setAttribute('aria-pressed',String(Number(b.dataset.d)===diaSel)));$('comidasDia').innerHTML=comidasHTML(diaSel);}
+});
+cargar();
+})();
+</script>
+</body>
+</html>
