@@ -786,7 +786,7 @@ function mostrarAuth(modo,info){
     <p>${esc(info&&info.error||'Tu cuenta no está activa.')} Tus datos están guardados: cuando se active vas a encontrar todo como lo dejaste.</p>
     ${info&&info.soporte&&info.soporte.whatsapp?`<a class="btn wa full" href="${waLink(info.soporte.whatsapp,'Hola! Quiero activar mi cuenta de Plan Coach.')}" target="_blank" rel="noopener">Escribir por WhatsApp para activar</a><p class="note" style="text-align:center">${esc(info.soporte.whatsapp)}</p>`:''}
     <button class="linkbtn" type="button" data-auth="login">Ingresar con otra cuenta</button></div>`;
-  else form=`<div class="btns" style="flex-direction:column"><button class="btn pri full" data-auth="registro">Probar 15 días gratis</button><button class="btn full" data-auth="login">Ya tengo cuenta</button><a class="btn full" href="/demo">Ver la demo sin registrarme</a></div>`;
+  else form=`<div style="display:grid;gap:8px"><button class="btn pri full" data-auth="registro">Probar 15 días gratis</button><button class="btn full" data-auth="login">Ya tengo cuenta</button><a class="btn full" href="/demo">Ver la demo sin registrarme</a></div>`;
   el.innerHTML=`<div class="hero"><div class="wrap">${logo}<h1>Plan Coach</h1><p>Tus alumnos, rutinas, planes de comida y cobros en una sola app, desde el celular.</p></div></div>
    <div class="wrap body">${modo==='inicio'?`<ul class="feats">${FEATS.map(([ic,t,dd])=>`<li>${ic}<b>${t}</b><span class="muted">${dd}</span></li>`).join('')}</ul>`:''}${form}</div>`;
   const ff=el.querySelector('form input');if(ff)setTimeout(()=>{try{ff.focus({preventScroll:true})}catch(e){}},50);
