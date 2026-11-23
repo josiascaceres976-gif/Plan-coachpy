@@ -212,7 +212,7 @@ nav.tabs .dot{position:absolute;top:5px;left:calc(50% + 7px);min-width:17px;heig
 
 .demobar{background:var(--accent);color:var(--on-accent);font-size:12.5px}.demobar .wrap{display:flex;align-items:center;gap:10px;padding-block:7px}.demobar span{flex:1;min-width:0}.demobar button{border:1px solid currentColor;background:transparent;color:inherit;border-radius:8px;padding:3px 10px;font-size:12px;font-weight:600;flex:none}
 .ejth{width:46px;height:46px;border-radius:10px;background:var(--sunk);display:grid;place-items:center;overflow:hidden;flex:none;color:var(--muted)}.ejth img{width:100%;height:100%;object-fit:cover;display:block}.ejth svg{width:20px;height:20px}
-.ejill{background:var(--sunk);border-radius:12px;display:flex;justify-content:center}.ejill svg{width:min(100%,300px);height:auto;display:block}.ejth svg.mini{width:100%;height:100%;background:var(--sunk)}
+.ejill{background:#fff;border-radius:12px;display:flex;justify-content:center;overflow:hidden}.ejill svg,.ejill img{width:min(100%,320px);height:auto;display:block}.ejth img.ejgif{background:#fff;object-fit:contain}.ejth svg.mini{width:100%;height:100%;background:var(--sunk)}
 .steps{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:6px;font-size:14px}
 .ejbig img{width:100%;max-height:55vh;object-fit:contain;border-radius:12px;display:block;background:var(--sunk)}
 .toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(150px + env(safe-area-inset-bottom,0px));z-index:60;background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:12px;font-weight:600;font-size:14px;max-width:90%;text-align:center}
@@ -893,11 +893,11 @@ function saveAlumno(id){
 let LIBOPEN=null;
 function ejMediaHTML(o){const ls=lineasEj(o);if(!ls.length)return '';
   return `<div><h3>Cómo se hace cada ejercicio</h3><p class="note" style="margin:4px 0 8px">Tocá un ejercicio para ver su ilustración o agregarle foto, video o indicaciones. Al alumno le llega el link a la Guía de ejercicios con la ilustración animada (o tu video, si cargaste uno).</p><div class="list">${ls.map(l=>{const n=nombreEj(l),i=infoEj(l);
-    return `<button class="row" data-act="ej" data-n="${esc(n)}"><span class="ejth">${i&&i.foto?`<img src="/_blob/${esc(i.foto)}" alt="" onerror="this.remove()">`:EJ.clave(n)?`<svg class="mini" viewBox="0 -18 200 214" aria-hidden="true">${EJ.frame(EJ.clave(n),1)}</svg>`:I.cam}</span><div class="main"><div class="t">${esc(n)}</div><div class="s">${[EJ.clave(n)?'Con ilustración':'',i&&i.foto?'foto propia':'',i&&i.video?'video propio':(EJ.clave(n)?'':'video de YouTube'),i&&i.tips?'indicaciones':''].filter(Boolean).join(' · ')}</div></div><span class="chev">${I.chev}</span></button>`;}).join('')}</div></div>`;}
+    return `<button class="row" data-act="ej" data-n="${esc(n)}"><span class="ejth">${i&&i.foto?`<img src="/_blob/${esc(i.foto)}" alt="" onerror="this.remove()">`:EJ.clave(n)?`<img class="ejgif" src="/ej/${EJ.clave(n)}.webp" alt="" loading="lazy">`:I.cam}</span><div class="main"><div class="t">${esc(n)}</div><div class="s">${[EJ.clave(n)?'Con ilustración':'',i&&i.foto?'foto propia':'',i&&i.video?'video propio':(EJ.clave(n)?'':'video de YouTube'),i&&i.tips?'indicaciones':''].filter(Boolean).join(' · ')}</div></div><span class="chev">${I.chev}</span></button>`;}).join('')}</div></div>`;}
 function formEj(n){
   const k=slug(n),i=S.ejercicios[k]||{},ek=EJ.clave(n),ex=ek&&EJ.X[ek];
   sheet(`<h2>${esc(n)}</h2>
-  ${ex?`<div class="ejill"><svg viewBox="0 -18 200 214" role="img" aria-label="Ilustración de ${esc(ex.n)}" data-ej="${ek}">${EJ.frame(ek,0)}</svg></div><ol class="steps">${ex.pasos.map(p=>`<li>${esc(p)}</li>`).join('')}</ol>`:''}
+  ${ex?`<div class="ejill"><img src="/ej/${ek}.webp" alt="Cómo se hace ${esc(ex.n)}" width="420" height="420"></div><ol class="steps">${ex.pasos.map(p=>`<li>${esc(p)}</li>`).join('')}</ol>`:''}
   ${i.foto?`<div class="ejbig"><img src="/_blob/${esc(i.foto)}" alt="Cómo se hace ${esc(n)}"></div>`:(ex?'':`<div class="empty">Este ejercicio no tiene ilustración en la guía. Podés subir una foto o un video propio.</div>`)}
   ${ASSETS?`<div class="f"><label for="ejF">${i.foto?'Cambiar foto propia':'Subir foto propia (opcional)'}</label><input id="ejF" type="file" accept="image/*"></div>`:'<p class="note">En la versión completa el entrenador sube una foto de cómo se hace el ejercicio.</p>'}
   <div class="f"><label for="ejV">Link de video propio (YouTube, Instagram, Drive…)</label><input id="ejV" inputmode="url" placeholder="https://…" value="${esc(i.video||'')}"></div>

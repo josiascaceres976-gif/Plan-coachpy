@@ -63,8 +63,8 @@ section{display:flex;flex-direction:column;gap:8px;scroll-margin-top:12px}
 .days button[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
 .ej{display:grid;grid-template-columns:96px 1fr;gap:12px;align-items:start;border-top:1px solid var(--line);padding-top:12px}
 .ej:first-of-type{border-top:0;padding-top:0}
-.ej .ill{background:var(--sunk);border-radius:12px;overflow:hidden;aspect-ratio:200/214}
-.ej .ill svg{width:100%;height:100%;display:block}
+.ej .ill{background:#fff;border-radius:12px;overflow:hidden;aspect-ratio:1/1}
+.ej .ill svg,.ej .ill img{width:100%;height:100%;display:block;object-fit:contain}
 .ej .ill.none{display:grid;place-items:center;color:var(--muted);font-size:12px;text-align:center;padding:6px}
 .ej b{display:block}
 .ej .tip{font-size:13px;color:var(--muted);margin-top:4px}
@@ -115,7 +115,7 @@ function avisosHTML(){
 function ejHTML(e){
   const k=window.EJ&&EJ.clave(e.nombre);
   const link=e.video||(k?GUIA+'#'+k:'https://www.youtube.com/results?search_query='+encodeURIComponent(e.nombre+' técnica correcta'));
-  return `<div class="ej">${k?`<div class="ill"><svg viewBox="0 -18 200 214" role="img" aria-label="Cómo se hace ${esc(e.nombre)}" data-ej="${k}">${EJ.frame(k,0)}</svg></div>`:'<div class="ill none">Mirá el video</div>'}
+  return `<div class="ej">${k?`<div class="ill"><img src="/ej/${k}.webp" alt="Cómo se hace ${esc(e.nombre)}" loading="lazy"></div>`:'<div class="ill none">Mirá el video</div>'}
    <div><b>${esc(e.linea)}</b>${e.tips?`<div class="tip">💡 ${esc(e.tips)}</div>`:''}<a href="${esc(link)}" target="_blank" rel="noopener">${e.video?'▶ Ver video':'▶ Cómo se hace'}</a></div></div>`;
 }
 function comidasHTML(d){

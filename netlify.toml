@@ -31,3 +31,8 @@
   from = "/alumno"
   to = "/alumno.html"
   status = 200
+
+[[headers]]
+  for = "/ej/*"
+  [headers.values]
+    Cache-Control = "public, max-age=604800"

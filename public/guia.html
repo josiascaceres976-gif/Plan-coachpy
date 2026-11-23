@@ -51,12 +51,12 @@ main .wrap{padding-block:18px 40px;display:flex;flex-direction:column;gap:22px}
 .grupo h2{font-family:var(--display);font-weight:700;font-size:15px;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);margin:0}
 .grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
 .mini{border:1px solid var(--line);background:var(--surface);border-radius:14px;padding:8px 8px 10px;text-align:left;cursor:pointer;color:var(--ink);font:inherit;display:flex;flex-direction:column;gap:4px;min-width:0;text-decoration:none}
-.mini svg{width:100%;height:auto;display:block;background:var(--sunk);border-radius:10px;aspect-ratio:200/214}
+.mini img{width:100%;height:auto;display:block;background:#fff;border-radius:10px;aspect-ratio:1/1;object-fit:contain}
 .mini b{font-size:14px;line-height:1.25}
 .mini span{font-size:12px;color:var(--muted)}
 .ficha{background:var(--surface);border:1px solid var(--line);border-radius:18px;overflow:hidden}
-.ficha .ill{background:var(--sunk);display:flex;justify-content:center}
-.ficha .ill svg{width:min(100%,360px);height:auto;display:block}
+.ficha .ill{background:#fff;display:flex;justify-content:center}
+.ficha .ill img{width:min(100%,420px);height:auto;display:block}
 .ficha .tx{padding:16px;display:flex;flex-direction:column;gap:12px}
 .ficha h2{font-family:var(--display);font-weight:700;font-size:30px;line-height:1.02;text-transform:uppercase;margin:0;text-wrap:balance}
 .musc{font-size:13px;font-weight:600;color:var(--accent);background:var(--accent-soft);border-radius:20px;padding:3px 10px;align-self:flex-start}
@@ -334,12 +334,12 @@ const app=document.getElementById('app');
 let filtro='Todos';
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 function ficha(k){const x=EJ.X[k];
-  return `<article class="ficha" id="f-${k}"><div class="ill"><svg viewBox="0 -18 200 214" role="img" aria-label="Ilustración de ${esc(x.n)}" data-ej="${k}">${EJ.frame(k,0)}</svg></div>
+  return `<article class="ficha" id="f-${k}"><div class="ill"><img src="/ej/${k}.webp" alt="Cómo se hace ${esc(x.n)}" width="420" height="420"></div>
   <div class="fases"><span>Posición inicial</span><span>Posición final</span></div>
   <div class="tx"><h2>${esc(x.n)}</h2><span class="musc">${esc(x.m)}</span>
   <ol>${x.pasos.map(p=>`<li><span>${esc(p)}</span></li>`).join('')}</ol>
   <div class="err"><b>Error común</b>${esc(x.error)}</div></div></article>`;}
-function mini(k){const x=EJ.X[k];return `<a class="mini" href="#${k}"><svg viewBox="0 -18 200 214" aria-hidden="true">${EJ.frame(k,1)}</svg><b>${esc(x.n)}</b><span>${esc(x.m)}</span></a>`;}
+function mini(k){const x=EJ.X[k];return `<a class="mini" href="#${k}"><img src="/ej/${k}.webp" alt="" loading="lazy"><b>${esc(x.n)}</b><span>${esc(x.m)}</span></a>`;}
 function render(){
   const h=decodeURIComponent((location.hash||'').slice(1));
   if(h&&EJ.X[h]){

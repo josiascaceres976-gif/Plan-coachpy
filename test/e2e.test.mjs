@@ -74,7 +74,7 @@ const wa = abrir('alumno.html', '/alumno?t=' + link);
 await hasta(() => txt(wa).includes('Hola Diego'), 'app del alumno');
 assert.ok(txt(wa).includes('Entrenás con Carla Fit'));
 assert.ok(wa.document.querySelectorAll('.ej').length >= 4, 'ejercicios de la rutina');
-assert.ok(wa.document.querySelector('.ej svg[data-ej]'), 'ilustración animada');
+assert.ok(wa.document.querySelector('.ej .ill img[src^="/ej/"]'), 'imagen animada del ejercicio');
 assert.ok(txt(wa).includes('Activar avisos'));
 
 /* 4. panel Master */
