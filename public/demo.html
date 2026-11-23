@@ -829,7 +829,7 @@ function renderLib(h,v,fab){
   const col=UI.lib,isR=col==='recetas';
   const items=Object.entries(S[col]).map(([id,o])=>({id,...o})).sort((a,b)=>String(a.titulo).localeCompare(String(b.titulo)));
   h.innerHTML=`<div class="brand">Biblioteca</div><div class="hsub">${Object.keys(S.recetas).length} recetas · ${Object.keys(S.rutinas).length} rutinas</div>`;
-  v.innerHTML=(isR?'':`<a class="btn full" href="${GUIA}" target="_blank" rel="noopener">Ver la Guía de ejercicios ilustrada</a>`)+`<div class="seg" role="group" aria-label="Tipo"><button data-act="lib" data-k="recetas" aria-pressed="${isR}">Recetas</button><button data-act="lib" data-k="rutinas" aria-pressed="${!isR}">Rutinas</button></div>`+
+  v.innerHTML=(isR?`<button class="btn pri full" data-act="recetario">Recetario: elegí entre 297 recetas listas</button>`:`<a class="btn full" href="${GUIA}" target="_blank" rel="noopener">Ver la Guía de ejercicios ilustrada</a>`)+`<div class="seg" role="group" aria-label="Tipo"><button data-act="lib" data-k="recetas" aria-pressed="${isR}">Recetas</button><button data-act="lib" data-k="rutinas" aria-pressed="${!isR}">Rutinas</button></div>`+
    (items.length?`<div class="list">${items.map(o=>`<button class="row" data-act="editLib" data-col="${col}" data-id="${o.id}"><div class="main"><div class="t">${esc(o.titulo)}${tag(o)}</div><div class="s">${isR?[o.etiqueta||'',o.kcal?o.kcal+' kcal':'',o.prot?'P '+o.prot+' g':''].filter(Boolean).join(' · '):[o.nivel,o.dias,lineasEj(o).length+' ejercicios',(c=>c?c+' con foto':'')(lineasEj(o).filter(l=>(infoEj(l)||{}).foto).length)].filter(Boolean).join(' · ')}</div></div><span class="chev">${I.chev}</span></button>`).join('')}</div>`:`<div class="empty"><b>Sin ${isR?'recetas':'rutinas'} todavía</b>Guardalas una vez y enviáselas a cualquier alumno con dos toques.</div>`);
   fab.hidden=false;fab.innerHTML=isR?'+ Nueva receta':'+ Nueva rutina';fab.dataset.act='newLib';fab.dataset.col=col;
 }
@@ -935,6 +935,39 @@ function formLib(col,id){
   ${id?ejMediaHTML(o):'<p class="note">Guardá la rutina y después agregale foto y video a cada ejercicio.</p>'}`}
   <button class="btn pri full" data-act="saveLib" data-col="${col}" data-id="${id||''}">Guardar</button>
   ${id?`<div class="btns"><button class="btn" data-act="libToAlumno" data-col="${col}" data-id="${id}">Enviar a un alumno</button><button class="btn danger" data-act="delLib" data-col="${col}" data-id="${id}">Borrar</button></div>`:''}`);
+}
+/* ---- Recetario: 297 recetas listas para agregar a la biblioteca ---- */
+let RECETARIO=null;const RF=window.RF={q:'',c:'Todas',n:40};
+async function abrirRecetario(){
+  if(!RECETARIO){sheet('<h2>Recetario</h2><p class="note">Cargando recetas…</p>');
+    try{RECETARIO=await (await fetch('/recetario.json')).json();}catch(e){sheet('<h2>Recetario</h2><div class="empty"><b>No se pudo cargar</b>Revisá tu conexión e intentá de nuevo.</div>');return;}}
+  RF.n=40;sheet(`<h2>Recetario</h2><p class="note">${RECETARIO.length} recetas fitness bajas en carbohidratos. Tocá una para verla y agregarla a tu biblioteca.</p>
+   <div class="f"><label for="rfQ">Buscar</label><input id="rfQ" type="search" placeholder="Ej: pollo, huevo, postre" value="${esc(RF.q)}" oninput="RF.q=this.value;RF.n=40;listaRecetario()"></div>
+   <div class="seg" style="flex-wrap:wrap" role="group" aria-label="Categoría">${['Todas',...new Set(RECETARIO.map(r=>r.etiqueta))].map(c=>`<button data-act="rfCat" data-k="${esc(c)}" aria-pressed="${c===RF.c}">${esc(c)}</button>`).join('')}</div>
+   <div id="rfLista"></div>`);
+  listaRecetario();
+}
+window.listaRecetario=listaRecetario;function listaRecetario(){
+  const el=document.getElementById('rfLista');if(!el)return;
+  const norm=s=>String(s).toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'');const q=norm(RF.q.trim());
+  const ya=new Set(Object.values(S.recetas).map(o=>norm(o.titulo)));
+  const res=RECETARIO.map((r,i)=>({r,i})).filter(({r})=>(RF.c==='Todas'||r.etiqueta===RF.c)&&(!q||norm(r.titulo+' '+r.ingredientes).includes(q)));
+  el.innerHTML=res.length?`<div class="list">${res.slice(0,RF.n).map(({r,i})=>`<button class="row" data-act="rfVer" data-i="${i}"><div class="main"><div class="t">${esc(r.titulo)}${ya.has(norm(r.titulo))?' <span class="chip c-ok">En tu biblioteca</span>':''}</div><div class="s">${[r.etiqueta,r.tiempo,r.porciones?r.porciones+' porciones':''].filter(Boolean).map(esc).join(' · ')}</div></div><span class="chev">${I.chev}</span></button>`).join('')}</div>${res.length>RF.n?`<button class="btn full" data-act="rfMas">Ver más (${res.length-RF.n})</button>`:''}`
+   :'<div class="empty"><b>Sin resultados</b>Probá con otra palabra.</div>';
+}
+function verRecetaCatalogo(i){
+  const r=RECETARIO[i];
+  sheet(`<h2>${esc(r.titulo)}</h2><p class="note">${[r.etiqueta,r.tiempo,r.porciones?r.porciones+' porciones':''].filter(Boolean).map(esc).join(' · ')}</p>
+   <h3>Ingredientes</h3><ul>${r.ingredientes.split('\n').map(x=>`<li>${esc(x)}</li>`).join('')}</ul>
+   <h3>Preparación</h3><ol>${r.pasos.split('\n').map(x=>`<li>${esc(x)}</li>`).join('')}</ol>
+   <button class="btn pri full" data-act="rfAdd" data-i="${i}">Agregar a mi biblioteca</button>
+   <button class="btn full" data-act="recetario">← Volver al recetario</button>`);
+}
+function agregarRecetaCatalogo(i){
+  const r=RECETARIO[i],id=uid();
+  const MOM={'Desayunos y snacks':'Desayuno','Almuerzos y cenas':'Almuerzo','Dulces y postres':'Merienda','Harinas y leches':'Desayuno','Patés':'Colación','Salsas':'Almuerzo','Jugos':'Colación'};
+  put('recetas',id,{titulo:r.titulo,etiqueta:MOM[r.etiqueta]||'Almuerzo',porciones:r.porciones||'',kcal:'',prot:'',carb:'',grasa:'',ingredientes:r.ingredientes,pasos:r.pasos});
+  toast('Agregada. Cargale las calorías si la vas a usar en el plan.');formLib('recetas',id);
 }
 function saveLib(col,id){
   const titulo=val('lT');if(!titulo){toast('Poné un nombre.');return;}
@@ -1096,6 +1129,11 @@ document.addEventListener('click',async e=>{
     case 'back':UI.alumno=null;render();break;
     case 'sub':UI.sub=d.k;render();break;
     case 'lib':UI.lib=d.k;render();break;
+    case 'recetario':abrirRecetario();break;
+    case 'rfCat':RF.c=d.k;RF.n=40;document.querySelectorAll('[data-act="rfCat"]').forEach(b=>b.setAttribute('aria-pressed',b.dataset.k===RF.c));listaRecetario();break;
+    case 'rfMas':RF.n+=40;listaRecetario();break;
+    case 'rfVer':verRecetaCatalogo(+d.i);break;
+    case 'rfAdd':agregarRecetaCatalogo(+d.i);break;
     case 'close':close();break;
     case 'newAlumno':formAlumno(null);break;
     case 'editAlumno':formAlumno(A);break;

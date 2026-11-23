@@ -323,42 +323,71 @@ function animar(root){
 }
 return {X,clave,svg,frame,animar};
 })();
-const GRUPOS=[
- ['Piernas y glúteos',['sentadilla-con-barra','sentadilla-goblet','peso-muerto-rumano','prensa','zancadas','elevacion-talones','puente-de-gluteo']],
- ['Pecho y hombros',['press-de-banca','flexiones-rodillas','fondos','press-militar','elevaciones-laterales']],
- ['Espalda',['dominadas','jalon-al-pecho','remo-con-barra','remo-con-mancuerna','face-pull']],
- ['Brazos',['curl-de-biceps','extension-triceps']],
- ['Zona media',['plancha']]
-];
+var EJS={
+ ZONAS:[['Piernas','🦵'],['Pecho','🏋️'],['Espalda','🧗'],['Hombros','🙆'],['Brazos','💪'],['Abdomen','🔥']],
+ X:{
+ 'sentadilla-con-barra':{z:'Piernas',p:['Barra sobre la espalda, pies al ancho de hombros.','Bajá como si te sentaras en una silla.','Subí empujando con los talones.'],o:'Que las rodillas no se vayan hacia adentro.'},
+ 'sentadilla-goblet':{z:'Piernas',p:['Mancuerna pegada al pecho.','Bajá como si te sentaras, espalda recta.','Subí empujando con los talones.'],o:'No despegues los talones del piso.'},
+ 'peso-muerto-rumano':{z:'Piernas',p:['Barra frente a las piernas, rodillas apenas dobladas.','Llevá la cola hacia atrás y bajá la barra pegada a las piernas.','Volvé a subir apretando la cola.'],o:'Espalda siempre recta, nunca redonda.'},
+ 'prensa':{z:'Piernas',p:['Espalda bien apoyada, pies en el centro de la plataforma.','Bajá doblando las rodillas.','Empujá sin trabar las rodillas al final.'],o:'No despegues la cola del asiento.'},
+ 'zancadas':{z:'Piernas',p:['Un pie adelante y otro atrás.','Bajá hasta que la rodilla de atrás casi toque el piso.','Subí y cambiá de pierna.'],o:'Mantené el cuerpo derecho.'},
+ 'elevacion-talones':{z:'Piernas',p:['Parado, con las piernas estiradas.','Subí en puntas de pie.','Bajá despacio.'],o:'Hacelo lento, sin rebotar.'},
+ 'puente-de-gluteo':{z:'Piernas',p:['Acostado boca arriba, rodillas dobladas.','Subí la cadera apretando la cola.','Bajá despacio.'],o:'Empujá con los talones, no con la espalda.'},
+ 'press-de-banca':{z:'Pecho',p:['Acostado en el banco, pies firmes en el piso.','Bajá la barra hasta el pecho.','Empujá hacia arriba.'],o:'No hagas rebotar la barra en el pecho.'},
+ 'flexiones-rodillas':{z:'Pecho',p:['Manos en el piso y rodillas apoyadas.','Bajá el pecho doblando los codos.','Subí empujando el piso.'],o:'Cuerpo recto, sin hundir la cadera.'},
+ 'fondos':{z:'Brazos',p:['Agarrate de las barras con los brazos estirados.','Bajá doblando los codos.','Subí hasta estirar los brazos.'],o:'No bajes de más.'},
+ 'press-militar':{z:'Hombros',p:['Mancuernas a la altura de los hombros.','Empujá hacia arriba.','Bajá despacio.'],o:'No arquees la espalda.'},
+ 'elevaciones-laterales':{z:'Hombros',p:['Parado, una mancuerna en cada mano.','Subí los brazos a los costados hasta los hombros.','Bajá despacio.'],o:'Usá poco peso y no balancees el cuerpo.'},
+ 'extension-triceps':{z:'Brazos',p:['Parado frente a la polea, codos pegados al cuerpo.','Empujá la cuerda hacia abajo.','Volvé despacio.'],o:'Solo se mueven los antebrazos.'},
+ 'remo-con-mancuerna':{z:'Espalda',p:['Una mano y una rodilla apoyadas en el banco.','Tirá la mancuerna hacia la cadera.','Bajá despacio.'],o:'Espalda recta, sin girar el cuerpo.'},
+ 'dominadas':{z:'Espalda',p:['Colgado de la barra, con la banda si la necesitás.','Subí hasta pasar el mentón por la barra.','Bajá despacio.'],o:'Sin balancearte.'},
+ 'remo-con-barra':{z:'Espalda',p:['Inclinado hacia adelante, espalda recta.','Tirá la barra hacia la panza.','Bajá despacio.'],o:'No redondees la espalda.'},
+ 'jalon-al-pecho':{z:'Espalda',p:['Sentado, agarrá la barra bien abierta.','Bajala hasta el pecho.','Subí despacio.'],o:'No tires el cuerpo hacia atrás.'},
+ 'face-pull':{z:'Hombros',p:['Agarrá la cuerda con los brazos estirados.','Tirá hacia la cara abriendo los codos.','Volvé despacio.'],o:'Codos siempre altos.'},
+ 'curl-de-biceps':{z:'Brazos',p:['Parado, una mancuerna en cada mano.','Subí doblando los codos.','Bajá despacio.'],o:'Codos quietos, sin balancear el cuerpo.'},
+ 'plancha':{z:'Abdomen',p:['Apoyá antebrazos y puntas de pie.','Mantené el cuerpo recto como una tabla.','Aguantá el tiempo indicado.'],o:'No levantes ni hundas la cadera.'}
+ },
+ /* "Sentadilla — 4x10 — 90 s" → {series:4, reps:'10', desc:'90 s'} */
+ dosis(linea){
+  const partes=String(linea).split(/\s+[—–-]\s+/).slice(1);let series=null,reps=null,desc=null;const extra=[];
+  partes.forEach(p=>{const m=p.match(/^(\d+)\s*[x×]\s*(.+)$/i);
+   if(m&&series==null){series=+m[1];reps=m[2].trim();}
+   else if(/^\d+\s*(s|seg|min)/i.test(p)&&desc==null)desc=p.trim();else extra.push(p.trim());});
+  return {series,reps,desc,extra:extra.join(' · ')};
+ }
+};
+
+const GRUPOS=EJS.ZONAS.map(([z])=>[z,Object.keys(EJS.X).filter(k=>EJS.X[k].z===z)]).filter(g=>g[1].length);
+const ICO=Object.fromEntries(EJS.ZONAS);
 const app=document.getElementById('app');
 let filtro='Todos';
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
-function ficha(k){const x=EJ.X[k];
+function ficha(k){const x=EJ.X[k],y=EJS.X[k];
   return `<article class="ficha" id="f-${k}"><div class="ill"><img src="/ej/${k}.webp" alt="Cómo se hace ${esc(x.n)}" width="420" height="420"></div>
-  <div class="fases"><span>Posición inicial</span><span>Posición final</span></div>
-  <div class="tx"><h2>${esc(x.n)}</h2><span class="musc">${esc(x.m)}</span>
-  <ol>${x.pasos.map(p=>`<li><span>${esc(p)}</span></li>`).join('')}</ol>
-  <div class="err"><b>Error común</b>${esc(x.error)}</div></div></article>`;}
-function mini(k){const x=EJ.X[k];return `<a class="mini" href="#${k}"><img src="/ej/${k}.webp" alt="" loading="lazy"><b>${esc(x.n)}</b><span>${esc(x.m)}</span></a>`;}
+  <div class="tx"><h2>${esc(x.n)}</h2><span class="musc">${ICO[y.z]} ${esc(y.z)}</span>
+  <ol>${y.p.map(p=>`<li><span>${esc(p)}</span></li>`).join('')}</ol>
+  <div class="err"><b>⚠️ Cuidado</b>${esc(y.o)}</div></div></article>`;}
+function mini(k){const x=EJ.X[k];return `<a class="mini" href="#${k}"><img src="/ej/${k}.webp" alt="" loading="lazy"><b>${esc(x.n)}</b></a>`;}
 function render(){
   const h=decodeURIComponent((location.hash||'').slice(1));
   if(h&&EJ.X[h]){
     const g=GRUPOS.find(([,ks])=>ks.includes(h));
     const otros=g?g[1].filter(k=>k!==h):[];
-    app.innerHTML=`<a class="back" href="#todos">← Todos los ejercicios</a>${ficha(h)}${otros.length?`<section class="grupo"><h2>Más de ${esc(g[0].toLowerCase())}</h2><div class="grid">${otros.map(mini).join('')}</div></section>`:''}`;
+    app.innerHTML=`<a class="back" href="#todos">← Todos los ejercicios</a>${ficha(h)}${otros.length?`<section class="grupo"><h2>Más ejercicios de ${esc(g[0].toLowerCase())}</h2><div class="grid">${otros.map(mini).join('')}</div></section>`:''}`;
     window.scrollTo(0,0);
   }else{
     const gs=GRUPOS.filter(([n])=>filtro==='Todos'||filtro===n);
     app.innerHTML=`<div class="chips" role="group" aria-label="Filtrar por zona">${['Todos',...GRUPOS.map(g=>g[0])].map(n=>`<button data-f="${esc(n)}" aria-pressed="${n===filtro}">${esc(n)}</button>`).join('')}</div>
-    ${gs.map(([n,ks])=>`<section class="grupo"><h2>${esc(n)}</h2><div class="grid">${ks.map(mini).join('')}</div></section>`).join('')}
-    <p class="nota">Tocá un ejercicio para ver la animación y los pasos. Ante cualquier duda, consultá a tu entrenador.</p>`;
+    ${gs.map(([n,ks])=>`<section class="grupo"><h2>${ICO[n]} ${esc(n)}</h2><div class="grid">${ks.map(mini).join('')}</div></section>`).join('')}
+    <p class="nota">Tocá un ejercicio para verlo en movimiento. Ante cualquier duda, preguntale a tu entrenador.</p>`;
   }
   EJ.animar(app);
 }
 app.addEventListener('click',e=>{const b=e.target.closest('[data-f]');if(b){filtro=b.dataset.f;render();}});
 window.addEventListener('hashchange',render);
 render();
-</script>
+
+/* Explicación simple de cada ejercicio, pensada para el alumno: zona del cuerpo, 3 pasos cortos y un cuidado */</script>
 
 </body>
 </html>

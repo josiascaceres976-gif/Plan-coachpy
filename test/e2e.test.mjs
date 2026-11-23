@@ -116,7 +116,7 @@ await hasta(() => txt(wa2).includes('no tiene la cuenta activa'), 'alumno ve avi
 
 /* 6. demo y guía cargan sin errores */
 const wd = abrir('demo.html', '/demo'); await hasta(() => txt(wd).includes('Laura Benítez'), 'demo');
-const wg = abrir('guia.html', '/guia#plancha'); await hasta(() => txt(wg).includes('Abdomen y zona media'), 'guía');
+const wg = abrir('guia.html', '/guia#plancha'); await hasta(() => txt(wg).includes('Abdomen') && txt(wg).includes('Cuidado'), 'guía');
 
 assert.deepEqual(errores, []);
 console.log('RECORRIDO COMPLETO OK');
